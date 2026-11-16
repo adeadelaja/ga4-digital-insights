@@ -1,0 +1,17 @@
+event_name,when_it_fires,gtm_trigger,parameters,key_event,ga4_recommended_event,used_in
+page_view,Every page load (Google tag),Initialization: all pages,page_location; page_title; page_referrer,no,yes (automatic),03_landing_pages.sql
+view_item_list,A product list or category page is shown,CE | ecommerce events,item_list_id; item_list_name; items,no,yes,
+select_item,A product is clicked in a list,CE | ecommerce events,item_list_id; item_list_name; items,no,yes,
+view_item,A product page is shown,CE | ecommerce events,currency; value; items,no,yes,02_funnel_dropoff.sql; 05_ab_test_baseline.sql
+add_to_cart,Add to cart succeeds,CE | ecommerce events,currency; value; items,no,yes,02_funnel_dropoff.sql; 05_ab_test_baseline.sql
+remove_from_cart,An item is removed from the cart,CE | ecommerce events,currency; value; items,no,yes,ab test guardrail
+view_cart,The cart page is shown,CE | ecommerce events,currency; value; items; experiment_id; experiment_variant,no,yes,ab test entry point
+begin_checkout,Checkout starts,CE | ecommerce events,currency; value; coupon; items; experiment_id; experiment_variant,no,yes,02_funnel_dropoff.sql; 05_ab_test_baseline.sql
+add_shipping_info,Delivery option is submitted,CE | ecommerce events,currency; value; shipping_tier; items,no,yes,02_funnel_dropoff.sql
+add_payment_info,Payment details are submitted,CE | ecommerce events,currency; value; payment_type; items,no,yes,02_funnel_dropoff.sql
+purchase,Confirmation page after payment succeeds (once per order),CE | ecommerce events,transaction_id; currency; value; tax; shipping; coupon; items; experiment_id; experiment_variant,yes,yes,all queries
+sign_up,Account created,CE | sign_up,method,yes,yes,
+login,Signed in,CE | login,method,no,yes,
+view_search_results,Site search results shown (enhanced measurement),automatic,search_term,no,yes (automatic),
+file_download,Document downloaded (enhanced measurement),automatic,file_name; file_extension; link_url,no,yes (automatic),
+generate_lead,B2B enquiry form confirmed by the server,CE | generate_lead,form_id; form_name; lead_type; product_line; value; currency,yes (lead sites),yes,tracking_plan.md section 6
