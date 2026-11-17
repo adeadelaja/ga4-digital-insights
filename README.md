@@ -53,7 +53,7 @@ Referral's share nearly triples between first touch and last click, which is the
 
 ### 4. The biggest loss after the product page is between cart and checkout
 
-Of sessions that add to cart, 61% never begin checkout (9,214 sessions). After that, 35% drop at payment and 26% between payment and purchase. Device is not the cause: 0.77% of desktop sessions, 0.82% of mobile sessions and 0.77% of tablet sessions end in a purchase, and the step rates are within two percentage points of each other.
+Of sessions that add to cart, 61% never begin checkout (9,214 sessions). After that, 35% drop at payment and 26% between payment and purchase. Device is not the cause: 0.77% of desktop sessions, 0.82% of mobile sessions and 0.77% of tablet sessions end in a purchase, and desktop and mobile are within two percentage points of each other at every step.
 
 Only 2,848 of the 4,848 purchasing sessions followed the whole funnel in one session. The other 41% bought from a cart built in an earlier visit, so a session funnel alone understates how well the store converts returning shoppers.
 
