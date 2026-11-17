@@ -1,0 +1,29 @@
+device_category,step_number,step_name,sessions_closed,share_of_sessions,step_conversion,step_drop_off,sessions_lost_at_step,sessions_open
+All devices,1,Session started,360129,1,,,,360129
+All devices,2,Viewed an item,77020,0.2139,0.2139,0.7861,283109,77020
+All devices,3,Added to cart,15173,0.0421,0.197,0.803,61847,15188
+All devices,4,Began checkout,5959,0.0165,0.3927,0.6073,9214,11106
+All devices,5,Added shipping,5959,0.0165,1,0,0,11105
+All devices,6,Added payment,3858,0.0107,0.6474,0.3526,2101,6815
+All devices,7,Purchased,2848,0.0079,0.7382,0.2618,1010,4848
+desktop,1,Session started,208942,1,,,,208942
+desktop,2,Viewed an item,44819,0.2145,0.2145,0.7855,164123,44819
+desktop,3,Added to cart,8780,0.042,0.1959,0.8041,36039,8790
+desktop,4,Began checkout,3425,0.0164,0.3901,0.6099,5355,6392
+desktop,5,Added shipping,3425,0.0164,1,0,0,6390
+desktop,6,Added payment,2196,0.0105,0.6412,0.3588,1229,3885
+desktop,7,Purchased,1606,0.0077,0.7313,0.2687,590,2749
+mobile,1,Session started,143185,1,,,,143185
+mobile,2,Viewed an item,30501,0.213,0.213,0.787,112684,30501
+mobile,3,Added to cart,6072,0.0424,0.1991,0.8009,24429,6077
+mobile,4,Began checkout,2404,0.0168,0.3959,0.6041,3668,4474
+mobile,5,Added shipping,2404,0.0168,1,0,0,4475
+mobile,6,Added payment,1574,0.011,0.6547,0.3453,830,2778
+mobile,7,Purchased,1180,0.0082,0.7497,0.2503,394,1995
+tablet,1,Session started,8002,1,,,,8002
+tablet,2,Viewed an item,1700,0.2124,0.2124,0.7876,6302,1700
+tablet,3,Added to cart,321,0.0401,0.1888,0.8112,1379,321
+tablet,4,Began checkout,130,0.0162,0.405,0.595,191,240
+tablet,5,Added shipping,130,0.0162,1,0,0,240
+tablet,6,Added payment,88,0.011,0.6769,0.3231,42,152
+tablet,7,Purchased,62,0.0077,0.7045,0.2955,26,104

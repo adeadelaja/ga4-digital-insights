@@ -63,9 +63,10 @@ def funnel():
         return
     df = pd.read_csv(path)
     df = df[df["device_category"] == "All devices"].sort_values("step_number")
-    # browsing sessions that never view a product are expected; judge the shopping steps from cart onwards
-    shopping = df[df["step_number"] >= 3].dropna(subset=["step_drop_off"])
-    worst = shopping.sort_values("step_drop_off", ascending=False).iloc[0]
+    # judge the steps after the cart: add_to_cart was not collected for the first weeks of the sample,
+    # so the product page step is understated (see tracking_gap below)
+    after_cart = df[(df["step_number"] >= 4) & (df["step_drop_off"] > 0)]
+    worst = after_cart.sort_values("step_drop_off", ascending=False).iloc[0]
     fig, ax = plt.subplots(figsize=(8, 4.2))
     ax.barh(df["step_name"], df["sessions_closed"], color=SERIES[0], height=0.6)
     ax.invert_yaxis()
@@ -74,9 +75,8 @@ def funnel():
     ax.set_xlabel("Sessions (closed funnel, all devices)")
     ax.margins(x=0.25)
     ax.xaxis.set_major_formatter(matplotlib.ticker.StrMethodFormatter("{x:,.0f}"))
-    title(ax, f"The weakest shopping step is '{worst['step_name']}'",
-          f"{worst['step_drop_off']:.0%} of sessions that reach the step before it drop out "
-          f"({worst['sessions_lost_at_step']:,.0f} sessions)")
+    title(ax, f"{worst['step_drop_off']:.0%} of sessions with a cart never begin checkout",
+          f"{worst['sessions_lost_at_step']:,.0f} sessions lost at that step, the largest loss after the product page")
     save(fig, "funnel.png")
 
 
@@ -84,8 +84,9 @@ def channels():
     path = RESULTS / "01_channel_performance.csv"
     if not path.exists():
         return
-    df = pd.read_csv(path).sort_values("revenue_usd")
-    top = df.iloc[-1]
+    df = pd.read_csv(path)
+    df = df[df["sessions"] >= 100].sort_values("revenue_usd")
+    direct = df[df["channel"] == "Direct"].iloc[0]
     fig, ax = plt.subplots(figsize=(8, 4.2))
     ax.barh(df["channel"], df["revenue_usd"], color=SERIES[0], height=0.6)
     for y, (rev, cr) in enumerate(zip(df["revenue_usd"], df["session_conversion_rate"])):
@@ -93,7 +94,7 @@ def channels():
     ax.set_xlabel("Revenue (USD)")
     ax.xaxis.set_major_formatter(matplotlib.ticker.StrMethodFormatter("${x:,.0f}"))
     ax.margins(x=0.45)
-    title(ax, f"{top['channel']} brings {top['share_of_revenue']:.0%} of revenue",
+    title(ax, f"Direct is {direct['share_of_sessions']:.0%} of sessions but only {direct['share_of_revenue']:.0%} of revenue",
           "Revenue by session channel, Google Merchandise Store, Nov 2020 to Jan 2021")
     save(fig, "channels.png")
 
@@ -104,6 +105,7 @@ def attribution():
         return
     df = pd.read_csv(path).sort_values("share_last_click")
     biggest = df.reindex(df["share_change_first_vs_last_click"].abs().sort_values().index).iloc[-1]
+    b_first, b_last = biggest["share_first_touch"], biggest["share_last_click"]
     fig, ax = plt.subplots(figsize=(8, 4.8))
     h = 0.26
     ys = range(len(df))
@@ -115,8 +117,7 @@ def attribution():
     ax.xaxis.set_major_formatter(matplotlib.ticker.PercentFormatter(1.0, decimals=0))
     ax.set_xlabel("Share of purchase revenue")
     ax.legend(frameon=False, loc="lower right", labelcolor=INK)
-    direction = "more" if biggest["share_change_first_vs_last_click"] > 0 else "less"
-    title(ax, f"{biggest['channel']} gets {abs(biggest['share_change_first_vs_last_click']) * 100:.1f} percentage points {direction} credit under first touch",
+    title(ax, f"{biggest['channel']} is credited with {b_first:.0%} of revenue under first touch and {b_last:.0%} under last click",
           "Share of revenue each channel is credited with under three attribution models")
     save(fig, "attribution.png")
 
@@ -125,11 +126,13 @@ def landing_pages():
     path = RESULTS / "03_landing_pages.csv"
     if not path.exists():
         return
-    df = pd.read_csv(path).sort_values("missed_conversions_vs_site", ascending=False).head(10)
+    df = pd.read_csv(path)
+    df = df[df["landing_page"] != "(no page_view)"]  # sessions with no page view are a tracking issue, not a page
+    df = df.sort_values("missed_conversions_vs_site", ascending=False).head(10)
     df = df[df["missed_conversions_vs_site"] > 0].sort_values("missed_conversions_vs_site")
     if df.empty:
         return
-    top = df.iloc[-1]
+    top3 = df.tail(3)["missed_conversions_vs_site"].sum()
     labels = [p if len(p) <= 38 else p[:35] + "..." for p in df["landing_page"]]
     fig, ax = plt.subplots(figsize=(10, 4.8))
     ax.barh(labels, df["missed_conversions_vs_site"], color=SERIES[0], height=0.6)
@@ -137,12 +140,34 @@ def landing_pages():
         ax.text(m, y, f"  {m:,.0f}  ({n:,.0f} sessions, {cr:.2%} convert)", va="center", fontsize=9, color=INK)
     ax.set_xlabel("Converting sessions missed against the site average")
     ax.margins(x=0.75)
-    title(ax, f"{top['landing_page'][:60]} is the biggest landing page gap",
+    title(ax, f"Three landing pages account for {top3:,.0f} missed converting sessions",
           "Landing pages with 500+ sessions, ranked by conversions missed against the site average")
     save(fig, "landing_pages.png")
 
 
+def tracking_gap():
+    path = RESULTS / "05_ab_test_baseline.csv"
+    if not path.exists():
+        return
+    df = pd.read_csv(path)
+    df = df[~df["period"].str.startswith("Overall")]
+    empty = df[df["sessions_added_to_cart"] == 0]
+    fig, ax = plt.subplots(figsize=(8, 4.2))
+    ax.bar(df["period"].str.replace("20", "", n=1), df["view_to_cart_rate"], color=SERIES[0], width=0.6)
+    ax.grid(axis="x", visible=False)
+    ax.grid(axis="y", visible=True)
+    ax.yaxis.set_major_formatter(matplotlib.ticker.PercentFormatter(1.0, decimals=0))
+    ax.set_ylabel("Product views that add to cart")
+    ax.tick_params(axis="x", labelsize=8.5)
+    for x, (rate, n) in enumerate(zip(df["view_to_cart_rate"], df["sessions_added_to_cart"])):
+        ax.text(x, rate + 0.006, "0" if n == 0 else f"{rate:.0%}", ha="center", fontsize=8.5, color=INK)
+    title(ax, f"No add to cart events were collected in the first {len(empty)} weeks",
+          f"{empty['sessions_viewed_item'].sum():,.0f} product view sessions in those weeks show no cart activity: a tracking gap, not behaviour")
+    save(fig, "tracking_gap.png")
+
+
 if __name__ == "__main__":
+    tracking_gap()
     funnel()
     channels()
     attribution()

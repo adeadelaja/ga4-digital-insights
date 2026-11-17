@@ -2,7 +2,7 @@
 
 ## Why this test
 
-The funnel query (`sql/02_funnel_dropoff.sql`) shows where sessions leave the purchase journey. This plan targets the cart step: shoppers have already chosen a product, so every session lost between cart and checkout is close to revenue. The sizing below uses the cart baseline measured in `sql/05_ab_test_baseline.sql`. If the funnel shows the product page step losing far more sessions, the same plan runs on that step instead, with view to cart as the primary metric.
+The funnel query (`sql/02_funnel_dropoff.sql`) shows where sessions leave the purchase journey. Of sessions that add to cart, 61% never begin checkout (9,214 sessions over three months), the largest loss after the product page. Shoppers at this step have already chosen a product, so every session recovered is close to revenue. The product page step loses more sessions in absolute terms, but its tracking was incomplete for part of the sample, so it is the second test, not the first.
 
 ## Hypothesis
 
@@ -25,13 +25,24 @@ If we show the delivery cost and the expected delivery date in the cart, before 
 
 ## Sample size and duration
 
-Run the planner with the Overall row of `results/05_ab_test_baseline.csv`:
+Baselines from `results/05_ab_test_baseline.csv`, using the ten weeks from 23 November 2020 onwards. The first three weeks are excluded because `add_to_cart` was not being collected (two weeks with no events, one partial).
+
+| Input | Value |
+| --- | --- |
+| Baseline cart to checkout rate | 39% (38.9% measured) |
+| Smallest lift worth detecting | 10% relative, so 39% to 42.9% |
+| Cart sessions a week | 1,466 |
+| Sessions needed per variant | 2,495 |
+| Sessions needed in total | 4,990 |
+| Test length | 4 full weeks |
 
 ```
-python experimentation/sample_size.py plan --baseline <cart_to_checkout_rate> --mde 0.10 --weekly <sessions_added_to_cart>
+python experimentation/sample_size.py plan --baseline 0.39 --mde 0.10 --weekly 1466
 ```
 
-The sized numbers are added to the README once the queries have run on the public sample.
+**Seasonality.** The weekly rate ranged from 24% to 47% across the sample, highest in early December and lowest in the first week of January. The test should run in four ordinary trading weeks and not straddle a seasonal peak, or the week to week swing will be larger than the lift being measured.
+
+**What a win is worth.** A 10% lift would add roughly 600 checkout sessions a quarter. If the later steps hold at their current rates that is about 285 more orders, or around $21,000 a quarter at $75 per converting session. This is an estimate to judge whether the test is worth running, not a forecast.
 
 ## Tracking before launch
 

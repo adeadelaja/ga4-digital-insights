@@ -28,7 +28,7 @@ The charts appear in `images/`.
 
 ## 4. Size the A/B test
 
-Open `results/05_ab_test_baseline.csv` and take the **Overall (weekly average)** row:
+Open `results/05_ab_test_baseline.csv`. Leave out any weeks where `sessions_added_to_cart` is zero or clearly partial (the first three in this sample), then take the rate and the weekly average from the rest:
 
 ```
 python experimentation/sample_size.py plan --baseline <cart_to_checkout_rate> --mde 0.10 --weekly <sessions_added_to_cart>
@@ -38,4 +38,4 @@ python experimentation/sample_size.py plan --baseline <cart_to_checkout_rate> --
 
 * `00_dataset_profile.csv` should show 92 days, 1 November 2020 to 31 January 2021.
 * Revenue in `01_channel_performance.csv` should add up to the revenue in `00_dataset_profile.csv`.
-* The `All devices` row of step 7 in `02_funnel_dropoff.csv` can be lower than the converting sessions in `01`, because the closed funnel only counts sessions that passed every step.
+* The `All devices` row of step 7 in `02_funnel_dropoff.csv` is lower than the converting sessions in `01` (2,848 against 4,848), because the closed funnel only counts sessions that passed every step. The `sessions_open` column should match `01`.

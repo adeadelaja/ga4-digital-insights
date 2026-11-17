@@ -1,0 +1,9 @@
+channel,purchases_first_touch,purchases_last_click,purchases_last_non_direct,revenue_first_touch_usd,revenue_last_click_usd,revenue_last_non_direct_usd,share_first_touch,share_last_click,share_last_non_direct,share_change_first_vs_last_click
+Referral,701,1818,1856,46521,122744,126274,0.1285,0.3389,0.3487,-0.2105
+Organic Search,1454,1887,1955,95775,111849,116153,0.2645,0.3088,0.3207,-0.0444
+Other (obfuscated),1281,1313,1360,80702,84660,89002,0.2228,0.2338,0.2457,-0.0109
+Direct,1251,365,177,79650,24611,10207,0.2199,0.068,0.0282,0.152
+Data deleted,839,234,266,50461,13302,15427,0.1393,0.0367,0.0426,0.1026
+Paid Search,166,50,53,9056,3173,3276,0.025,0.0088,0.009,0.0162
+Email,0,23,23,0,1659,1659,0,0.0046,0.0046,-0.0046
+Affiliates,0,2,2,0,167,167,0,0.0005,0.0005,-0.0005

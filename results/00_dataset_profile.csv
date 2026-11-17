@@ -1,0 +1,2 @@
+first_day,last_day,days,events,distinct_event_names,users,sessions,purchase_events,distinct_transactions,revenue_usd
+2020-11-01,2021-01-31,92,4295584,17,270154,360129,5692,4451,362165
