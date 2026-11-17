@@ -42,7 +42,7 @@ python experimentation/sample_size.py plan --baseline 0.39 --mde 0.10 --weekly 1
 
 **Seasonality.** The weekly rate ranged from 24% to 47% across the sample, highest in early December and lowest in the first week of January. The test should run in four ordinary trading weeks and not straddle a seasonal peak, or the week to week swing will be larger than the lift being measured.
 
-**What a win is worth.** A 10% lift would add roughly 600 checkout sessions a quarter. If the later steps hold at their current rates that is about 285 more orders, or around $21,000 a quarter at $75 per converting session. This is an estimate to judge whether the test is worth running, not a forecast.
+**What a win is worth.** At 1,466 cart sessions a week, a 10% lift (3.9 percentage points) would add roughly 740 checkout sessions a quarter. If 48% of them go on to buy, as checkout sessions do today, that is about 355 more orders, or around $26,000 a quarter at $75 per converting session. This is an estimate to judge whether the test is worth running, not a forecast.
 
 ## Tracking before launch
 
